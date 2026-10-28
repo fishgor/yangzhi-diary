@@ -1,7 +1,7 @@
 import BlobImage from '../components/BlobImage';
 import { LeafIcon } from '../components/Icons';
 import type { DiaryRecord, Plant } from '../types';
-import { fmtCN, latestRecord, sortPlants } from '../util';
+import { fmtCN, recordsOfPlant, sortPlants } from '../util';
 
 interface Props {
   plants: Plant[];
@@ -48,9 +48,11 @@ export default function PlantList({ plants, records, usageMB, onOpen, onCreate, 
       </div>
 
       {sorted.map((plant) => {
-        const latest = latestRecord(records, plant.id);
-        const count = records.filter((r) => r.plantId === plant.id).length;
-        const cover = latest?.photos[0]?.thumb;
+        const plantRecords = recordsOfPlant(records, plant.id);
+        const latest = plantRecords[0];
+        // 封面取最新一条「带图」记录的首图，只有文字的记录不占封面
+        const cover = plantRecords.find((r) => r.photos.length > 0)?.photos[0]?.thumb;
+        const count = plantRecords.length;
         const meta = [plant.place, plant.species].filter(Boolean).join(' · ') || '未填写品种与位置';
 
         return (
