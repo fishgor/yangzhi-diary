@@ -274,7 +274,7 @@ export default function App() {
             onOpenRecord={(recordId) => setView({ name: 'recordForm', plantId: currentPlant.id, recordId })}
             onCollage={() => setView({ name: 'collage', plantId: currentPlant.id })}
           />
-        ) : view.name === 'plantForm' ? (
+        ) : view.name === 'plantForm' && (!view.plantId || plants.some((p) => p.id === view.plantId)) ? (
           <PlantForm
             plant={view.plantId ? plants.find((p) => p.id === view.plantId) : undefined}
             onSave={savePlant}
